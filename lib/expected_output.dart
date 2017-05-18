@@ -19,8 +19,8 @@ Iterable<DataCase> dataCases({
       continue;
     }
 
-    var file = p.basename(entry.path)
-    .replaceFirst(new RegExp('\.$extension\$'), '');
+    var file =
+        p.basename(entry.path).replaceFirst(new RegExp('\.$extension\$'), '');
 
     // Explicitly create a File, in case the entry is a Link.
     var lines = new File(entry.path).readAsLinesSync();

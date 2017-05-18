@@ -36,15 +36,18 @@ void main() {
   });
 
   test('parses case w/ whitespace after >>>', () {
-    expect(dataCase.description, 'line 6: description with a space in the front.');
+    expect(
+        dataCase.description, 'line 6: description with a space in the front.');
   });
 
   test('parses case w/o whitespace after >>>', () {
-    expect(dataCase.description, 'line 10: description without a space in the front.');
+    expect(dataCase.description,
+        'line 10: description without a space in the front.');
   });
 
   test('parses case w/ multiple whitespace after >>>', () {
-    expect(dataCase.description, 'line 14: description with a few spaces in the front.');
+    expect(dataCase.description,
+        'line 14: description with a few spaces in the front.');
   });
 
   test('parses case w/ multiline input and output', () {
@@ -56,7 +59,8 @@ void main() {
     expect(dataCase.directory, endsWith('simple_data'));
     expect(dataCase.file, 'cases2');
     expect(dataCase.description, 'line 2: a second unit file');
-    expect(dataCase.testDescription, 'simple_data cases2 line 2: a second unit file');
+    expect(dataCase.testDescription,
+        'simple_data cases2 line 2: a second unit file');
   });
 
   test('the dataCases iterator is empty at the end', () {
