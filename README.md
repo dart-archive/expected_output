@@ -70,6 +70,9 @@ then `dataCasesUnder` will look for files ending in `.unit` in the same
 directory as the `library`. So our text file with the test cases should be,
 perhaps, `to_upper_case_package/test/cases.unit`.
 
+(Note: Why the weird library symbols? This is the simplest way to locate a
+directory or file relative to Dart source. Hopefully a temporary issue.)
+
 ## When to use
 
 This package is not very broad purposed, and is probably appropriate for only
