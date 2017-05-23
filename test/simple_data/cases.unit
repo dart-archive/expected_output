@@ -1,0 +1,22 @@
+>>>
+input 1
+<<<
+output 1
+>>> description with a space in the front.
+input 2
+<<<
+output 2
+>>>description without a space in the front.
+input 3
+<<<
+output 3
+>>>    description with a few spaces in the front.
+input 4
+<<<
+output 4
+>>> multiline input and output
+input
+five
+<<<
+output
+five
