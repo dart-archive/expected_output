@@ -2,18 +2,19 @@ import 'dart:io';
 import 'dart:mirrors';
 
 import 'package:path/path.dart' as p;
-import 'package:test/test.dart';
 
-// TODO(srawlins): add a recursive option
 /// Parse and yield data cases (each a [DataCase]) from [directory].
 ///
-/// By default, only read data cases from files with a `.unit` extension.
+/// By default, only read data cases from files with a `.unit` extension. Data
+/// cases are read from files located immediately in [directory], or
+/// recursively, according to [recursive].
 Iterable<DataCase> dataCases({
   String directory,
   String extension: 'unit',
+  bool recursive: true,
 }) sync* {
-  var entries =
-      new Directory(directory).listSync(recursive: false, followLinks: false);
+  var entries = new Directory(directory)
+      .listSync(recursive: recursive, followLinks: false);
   for (var entry in entries) {
     if (!entry.path.endsWith(extension)) {
       continue;
@@ -29,6 +30,7 @@ Iterable<DataCase> dataCases({
     while (i < lines.length) {
       var description =
           lines[i++].replaceFirst(new RegExp(r'>>>\s*'), '').trim();
+      var skip = description.startsWith('skip:');
       if (description == '') {
         description = 'line ${i+1}';
       } else {
@@ -45,10 +47,14 @@ Iterable<DataCase> dataCases({
         expectedOutput += lines[i] + '\n';
       }
 
+      var relativeDir =
+          p.relative(p.dirname(entry.path), from: p.dirname(directory));
+
       var dataCase = new DataCase(
-          directory: p.basename(directory),
+          directory: relativeDir,
           file: file,
           description: description,
+          skip: skip,
           input: input,
           expectedOutput: expectedOutput);
       yield dataCase;
@@ -57,9 +63,11 @@ Iterable<DataCase> dataCases({
 }
 
 /// Parse and yield data cases (each a [DataCase]) from the directory containing
-/// [library].
+/// [library], optionally under [subdirectory].
 ///
-/// By default, only read data cases from files with a `.unit` extension.
+/// By default, only read data cases from files with a `.unit` extension. Data
+/// cases are read from files located immediately in [directory], or
+/// recursively, according to [recursive].
 ///
 /// The typical use case of this method is to declare a library at the top of a
 /// Dart test file, then reference the symbol with a pound sign. Example:
@@ -76,12 +84,17 @@ Iterable<DataCase> dataCases({
 ///   }
 /// }
 /// ```
-Iterable<DataCase> dataCasesUnder(
-    {Symbol library, String extension: 'unit'}) sync* {
-  var directory =
-      p.dirname(currentMirrorSystem().findLibrary(library).uri.toFilePath());
-  for (var dataCase
-      in expectedOutputs(directory: directory, extension: extension)) {
+Iterable<DataCase> dataCasesUnder({
+  Symbol library,
+  String subdirectory: '',
+  String extension: 'unit',
+  bool recursive: true,
+}) sync* {
+  var directory = p.join(
+      p.dirname(currentMirrorSystem().findLibrary(library).uri.toFilePath()),
+      subdirectory);
+  for (var dataCase in dataCases(
+      directory: directory, extension: extension, recursive: recursive)) {
     yield dataCase;
   }
 }
@@ -92,6 +105,7 @@ class DataCase {
   final String directory;
   final String file;
   final String description;
+  final bool skip;
   final String input;
   final String expectedOutput;
 
@@ -99,6 +113,7 @@ class DataCase {
       {this.directory,
       this.file,
       this.description,
+      this.skip,
       this.input,
       this.expectedOutput});
 

@@ -1,0 +1,4 @@
+>>> this better be ignored
+because the test
+<<<
+is looking for .data files.

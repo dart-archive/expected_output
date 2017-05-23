@@ -27,12 +27,13 @@ void main() {
   });
 
   test('parses case w/o a description', () {
-    expect(dataCase.directory, endsWith('simple_data'));
+    expect(dataCase.directory, 'simple_data');
     expect(dataCase.file, 'cases');
     expect(dataCase.description, 'line 2');
     expect(dataCase.testDescription, 'simple_data cases line 2');
     expect(dataCase.input, 'input 1\n');
     expect(dataCase.expectedOutput, 'output 1\n');
+    expect(dataCase.skip, false);
   });
 
   test('parses case w/ whitespace after >>>', () {
@@ -55,8 +56,13 @@ void main() {
     expect(dataCase.expectedOutput, 'output\nfive\n');
   });
 
+  test('parses case w/ skip description', () {
+    expect(dataCase.description, 'line 24: skip: don\'t run this test');
+    expect(dataCase.skip, true);
+  });
+
   test('parses case w/o a description', () {
-    expect(dataCase.directory, endsWith('simple_data'));
+    expect(dataCase.directory, 'simple_data');
     expect(dataCase.file, 'cases2');
     expect(dataCase.description, 'line 2: a second unit file');
     expect(dataCase.testDescription,
