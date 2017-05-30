@@ -20,3 +20,9 @@ five
 <<<
 output
 five
+>>> skip: don't run this test
+input
+six
+<<<
+output
+six
