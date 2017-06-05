@@ -73,6 +73,20 @@ perhaps, `to_upper_case_package/test/cases.unit`.
 (Note: Why the weird library symbols? This is the simplest way to locate a
 directory or file relative to Dart source. Hopefully a temporary issue.)
 
+## API
+
+The `expected_output` API is small. Here's the gist:
+
+* `dataCases(directory: 'some/directory')` \
+  Iterate over all of the `.unit` files in `'some/directory'`, yielding
+  DataCases with input/output information.
+* `dataCasesUnder(library: #your.test.library)` \
+  Iterate over all of the `.unit` files in the directory where
+  `#your.test.library` Dart library is declared. This is just a convenience
+  method so that you don't need to import mirrors in your test.
+* `dataCasesInFile(path: 'path/to/your/data.unit')` \
+  Iterate over all of the DataCases found in `'path/to/your/data.unit'`.
+
 ## When to use
 
 This package is not very broad purposed, and is probably appropriate for only
