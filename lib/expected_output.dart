@@ -3,6 +3,45 @@ import 'dart:mirrors';
 
 import 'package:path/path.dart' as p;
 
+/// Parse and yield data cases (each a [DataCase]) from [path].
+Iterable<DataCase> dataCasesInFile({String path, String baseDir: null}) sync* {
+  var file = p.basename(path).replaceFirst(new RegExp(r'\..+$'), '');
+  baseDir ??= p.relative(p.dirname(path), from: p.dirname(p.dirname(path)));
+
+  // Explicitly create a File, in case the entry is a Link.
+  var lines = new File(path).readAsLinesSync();
+
+  var i = 0;
+  while (i < lines.length) {
+    var description = lines[i++].replaceFirst(new RegExp(r'>>>\s*'), '').trim();
+    var skip = description.startsWith('skip:');
+    if (description == '') {
+      description = 'line ${i+1}';
+    } else {
+      description = 'line ${i+1}: $description';
+    }
+
+    var input = '';
+    while (!lines[i].startsWith('<<<')) {
+      input += lines[i++] + '\n';
+    }
+
+    var expectedOutput = '';
+    while (++i < lines.length && !lines[i].startsWith('>>>')) {
+      expectedOutput += lines[i] + '\n';
+    }
+
+    var dataCase = new DataCase(
+        directory: baseDir,
+        file: file,
+        description: description,
+        skip: skip,
+        input: input,
+        expectedOutput: expectedOutput);
+    yield dataCase;
+  }
+}
+
 /// Parse and yield data cases (each a [DataCase]) from [directory].
 ///
 /// By default, only read data cases from files with a `.unit` extension. Data
@@ -20,45 +59,10 @@ Iterable<DataCase> dataCases({
       continue;
     }
 
-    var file =
-        p.basename(entry.path).replaceFirst(new RegExp('\.$extension\$'), '');
+    var relativeDir =
+        p.relative(p.dirname(entry.path), from: p.dirname(directory));
 
-    // Explicitly create a File, in case the entry is a Link.
-    var lines = new File(entry.path).readAsLinesSync();
-
-    var i = 0;
-    while (i < lines.length) {
-      var description =
-          lines[i++].replaceFirst(new RegExp(r'>>>\s*'), '').trim();
-      var skip = description.startsWith('skip:');
-      if (description == '') {
-        description = 'line ${i+1}';
-      } else {
-        description = 'line ${i+1}: $description';
-      }
-
-      var input = '';
-      while (!lines[i].startsWith('<<<')) {
-        input += lines[i++] + '\n';
-      }
-
-      var expectedOutput = '';
-      while (++i < lines.length && !lines[i].startsWith('>>>')) {
-        expectedOutput += lines[i] + '\n';
-      }
-
-      var relativeDir =
-          p.relative(p.dirname(entry.path), from: p.dirname(directory));
-
-      var dataCase = new DataCase(
-          directory: relativeDir,
-          file: file,
-          description: description,
-          skip: skip,
-          input: input,
-          expectedOutput: expectedOutput);
-      yield dataCase;
-    }
+    yield* dataCasesInFile(path: entry.path, baseDir: relativeDir);
   }
 }
 
