@@ -25,9 +25,9 @@ THIS IS ANOTHER PARAGRAPH.''';
 
 Multiline strings break the visual flow of code indentations. Additionally, when
 newline characters are important, you may not be able to just write a newline
-after `r'''`, or before the closing `''';`, which makes it hard to scan for
-where multiline Strings begin and end. Instead, let's add write this test case,
-and a few more, in a separate text file:
+before the closing `''';`, which makes it hard to scan for where multiline
+Strings begin and end. Instead, let's write this test case, and a few more, in a
+separate text file:
 
 ```none
 >>> Works on simple strings
@@ -105,5 +105,3 @@ probably much easier to write input and expected output in simple text blocks
 in simple text files. Examples would include a Markdown parser that needs to
 parse indented list continuations or indented code blocks, and text formatters
 that need to test specific indentation in the output.
-
-Disclaimer: this is not an official Google product.
