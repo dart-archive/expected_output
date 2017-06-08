@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:mirrors';
 
 import 'package:path/path.dart' as p;
+import 'package:test/test.dart';
 
 /// Parse and yield data cases (each a [DataCase]) from [path].
 Iterable<DataCase> dataCasesInFile({String path, String baseDir: null}) sync* {
@@ -100,6 +101,67 @@ Iterable<DataCase> dataCasesUnder({
   for (var dataCase in dataCases(
       directory: directory, extension: extension, recursive: recursive)) {
     yield dataCase;
+  }
+}
+
+/// Declare a test for each data case found in [directory], using [testBody]
+/// as the test body, with each data case passed to [testBody].
+///
+/// [directory], [extension], and [recursive] all act the same as in
+/// [dataCases].
+///
+/// A test will be skipped if it's description starts with "skip:".
+void testDataCases(
+    {String directory,
+    String extension: 'unit',
+    bool recursive: true,
+    void testBody(DataCase dataCase)}) {
+  for (var dataCase in dataCases(
+      directory: directory, extension: extension, recursive: recursive)) {
+    test(dataCase.description, () => testBody(dataCase), skip: dataCase.skip);
+  }
+}
+
+/// Declare a test for each data case found in the directory containing
+/// [library], using [testBody] as the test body, with each data case passed to
+/// [testBody].
+///
+/// [directory], [extension], and [recursive] all act the same as in
+/// [dataCases].
+///
+/// The test's description will be generated from the directory, file, and
+/// description of the data case.
+///
+/// A test will be skipped if it's description starts with "skip:".
+///
+/// Example:
+///
+/// ```dart
+/// library my_package.test.this_test;
+///
+/// import 'package:expected_output/expected_output.dart';
+/// import 'package:test/test.dart';
+///
+/// void main() {
+///   testDataCasesUnder(library: #my_package.test.this_test,
+///       testBody: (DataCase dataCase) {
+///     var output = myFunction(dataCase.input);
+///     expect(dataCase.expectedOutput, equals(output));
+///   });
+/// }
+/// ```
+void testDataCasesUnder(
+    {Symbol library,
+    String subdirectory: '',
+    String extension: 'unit',
+    bool recursive: true,
+    void testBody(DataCase dataCase)}) {
+  for (var dataCase in dataCasesUnder(
+      library: library,
+      subdirectory: subdirectory,
+      extension: extension,
+      recursive: recursive)) {
+    test(dataCase.description, () => testBody(dataCase), skip: dataCase.skip);
   }
 }
 

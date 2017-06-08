@@ -80,12 +80,38 @@ The `expected_output` API is small. Here's the gist:
 * `dataCases(directory: 'some/directory')` \
   Iterate over all of the `.unit` files in `'some/directory'`, yielding
   DataCases with input/output information.
+
 * `dataCasesUnder(library: #your.test.library)` \
   Iterate over all of the `.unit` files in the directory where
   `#your.test.library` Dart library is declared. This is just a convenience
   method so that you don't need to import mirrors in your test.
+
 * `dataCasesInFile(path: 'path/to/your/data.unit')` \
   Iterate over all of the DataCases found in `'path/to/your/data.unit'`.
+
+* ```dart
+  testDataCases(
+      directory: 'some/directory',
+      testBody: (DataCase dataCase) {
+        expect(something(dataCase.input), dataCase.expected_output);
+      });
+  ```
+
+  Iterate over all of the DataCases found in `'some/directory'`, declaring a
+  [test package] test case for each, using `testBody` as the body of the test
+  case.
+
+* ```dart
+  testDataCasesUnder(
+      library: #your.test.library,
+      testBody: (DataCase dataCase) {
+        expect(something(dataCase.input), dataCase.expected_output);
+      });
+  ```
+
+  Iterate over all of the DataCases found in the directory where
+  `#your.test.library` Dart library is declared, declaring a [test package] test
+  case for each, using `testBody` as the body of the test case.
 
 ## When to use
 
@@ -105,3 +131,5 @@ probably much easier to write input and expected output in simple text blocks
 in simple text files. Examples would include a Markdown parser that needs to
 parse indented list continuations or indented code blocks, and text formatters
 that need to test specific indentation in the output.
+
+[test package]: https://pub.dartlang.org/packages/test
