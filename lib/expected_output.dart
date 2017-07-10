@@ -12,7 +12,14 @@ Iterable<DataCase> dataCasesInFile({String path, String baseDir: null}) sync* {
   // Explicitly create a File, in case the entry is a Link.
   var lines = new File(path).readAsLinesSync();
 
+  var front_matter = new StringBuffer();
+
   var i = 0;
+
+  while (!lines[i].startsWith('>>>')) {
+    front_matter.write('${lines[i++]}\n');
+  }
+
   while (i < lines.length) {
     var description = lines[i++].replaceFirst(new RegExp(r'>>>\s*'), '').trim();
     var skip = description.startsWith('skip:');
@@ -35,6 +42,7 @@ Iterable<DataCase> dataCasesInFile({String path, String baseDir: null}) sync* {
     var dataCase = new DataCase(
         directory: baseDir,
         file: file,
+        front_matter: front_matter.toString(),
         description: description,
         skip: skip,
         input: input,
@@ -170,6 +178,7 @@ void testDataCasesUnder(
 class DataCase {
   final String directory;
   final String file;
+  final String front_matter;
   final String description;
   final bool skip;
   final String input;
@@ -178,6 +187,7 @@ class DataCase {
   DataCase(
       {this.directory,
       this.file,
+      this.front_matter,
       this.description,
       this.skip,
       this.input,
