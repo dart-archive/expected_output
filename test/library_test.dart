@@ -5,8 +5,10 @@ import 'package:test/test.dart';
 
 void main() {
   test('finds test cases when passed a library Symbol', () {
-    var iterator = dataCasesUnder(library: #expected_output.test.recursive_test,
-            subdirectory: 'recursive_data', recursive: false)
+    var iterator = dataCasesUnder(
+            library: #expected_output.test.recursive_test,
+            subdirectory: 'recursive_data',
+            recursive: false)
         .iterator;
     iterator.moveNext();
     var dataCase = iterator.current;
@@ -20,8 +22,10 @@ void main() {
   });
 
   test('finds test cases when passed a library Symbol, and subdirectories', () {
-    var iterator = dataCasesUnder(library: #expected_output.test.recursive_test,
-            subdirectory: 'recursive_data/deep', recursive: false)
+    var iterator = dataCasesUnder(
+            library: #expected_output.test.recursive_test,
+            subdirectory: 'recursive_data/deep',
+            recursive: false)
         .iterator;
     iterator.moveNext();
     var dataCase = iterator.current;

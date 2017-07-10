@@ -113,6 +113,32 @@ The `expected_output` API is small. Here's the gist:
   `#your.test.library` Dart library is declared, declaring a [test package] test
   case for each, using `testBody` as the body of the test case.
 
+## Front Matter
+
+Each data file can start with a section called _front matter_, which can be used
+as comments or as configuration. Here is an example:
+
+```
+This is front matter. It is free form,
+and can span multiple lines.
+>>> Data Case 1
+Input 1
+<<<
+Expected Output 1
+>>> Data Case 2
+Input 2
+<<<
+Expected Output 2
+```
+
+Each data case parsed from this data file will include a `front_matter` member,
+which has the value `This is front matter. It is free form,\nand can span
+multiple lines.`.
+
+Front matter does not necessarily ever need to be used in a test; it can act as
+a file comment. Alternatively, you may parse it as configuration, perhaps
+writing front matter as JSON or YAML.
+
 ## When to use
 
 This package is not very broad purposed, and is probably appropriate for only
