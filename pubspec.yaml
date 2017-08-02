@@ -1,8 +1,8 @@
 name: expected_output
-version: 1.2.0
+version: 1.2.1-dev
 description: Easily write and test multiline input and expected output
 author: Dart Team <misc@dartlang.org>
-homepage: http://pub.dartlang.org/packages/expected_output
+homepage: https://pub.dartlang.org/packages/expected_output
 
 environment:
   sdk: '>=1.19.0 <2.0.0-dev.infinity'
