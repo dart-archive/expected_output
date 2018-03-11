@@ -1,9 +1,6 @@
 library expected_output.test.recursive_test;
 
-import 'dart:mirrors';
-
 import 'package:expected_output/expected_output.dart';
-import 'package:path/path.dart' as p;
 import 'package:test/test.dart';
 
 void main() {
