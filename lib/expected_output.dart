@@ -24,9 +24,9 @@ Iterable<DataCase> dataCasesInFile({String path, String baseDir: null}) sync* {
     var description = lines[i++].replaceFirst(new RegExp(r'>>>\s*'), '').trim();
     var skip = description.startsWith('skip:');
     if (description == '') {
-      description = 'line ${i+1}';
+      description = 'line ${i + 1}';
     } else {
-      description = 'line ${i+1}: $description';
+      description = 'line ${i + 1}: $description';
     }
 
     var input = '';
