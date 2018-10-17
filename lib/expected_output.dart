@@ -74,7 +74,7 @@ Iterable<DataCase> dataCases({
 
     results.addAll(dataCasesInFile(path: entry.path, baseDir: relativeDir));
   }
-  
+
   // The API makes no guarantees on order. This is just here for stability in
   // tests.
   results.sort((a, b) {
