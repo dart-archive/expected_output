@@ -19,6 +19,13 @@ void main() {
     iterator.moveNext();
     var dataCase = iterator.current;
 
+    expect(dataCase.directory, 'recursive_data');
+    expect(dataCase.file, 'foo');
+    expect(dataCase.description, 'line 2: data case in the primary directory');
+
+    iterator.moveNext();
+    dataCase = iterator.current;
+
     expect(dataCase.directory, 'recursive_data/deep');
     expect(dataCase.file, 'bar');
     expect(dataCase.description, 'line 2: a deeper data case');
@@ -29,13 +36,6 @@ void main() {
     expect(dataCase.directory, 'recursive_data/deep/deeper');
     expect(dataCase.file, 'baz');
     expect(dataCase.description, 'line 2: deeper test case');
-
-    iterator.moveNext();
-    dataCase = iterator.current;
-
-    expect(dataCase.directory, 'recursive_data');
-    expect(dataCase.file, 'foo');
-    expect(dataCase.description, 'line 2: data case in the primary directory');
 
     var iteratorIsEmpty = !iterator.moveNext();
     expect(iteratorIsEmpty, isTrue);

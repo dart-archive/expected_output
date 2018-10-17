@@ -51,7 +51,7 @@ Iterable<DataCase> dataCasesInFile({String path, String baseDir: null}) sync* {
   }
 }
 
-/// Parse and yield data cases (each a [DataCase]) from [directory].
+/// Parse and return data cases (each a [DataCase]) from [directory].
 ///
 /// By default, only read data cases from files with a `.unit` extension. Data
 /// cases are read from files located immediately in [directory], or
@@ -60,9 +60,10 @@ Iterable<DataCase> dataCases({
   String directory,
   String extension: 'unit',
   bool recursive: true,
-}) sync* {
+}) {
   var entries = new Directory(directory)
       .listSync(recursive: recursive, followLinks: false);
+  var results = <DataCase>[];
   for (var entry in entries) {
     if (!entry.path.endsWith(extension)) {
       continue;
@@ -71,8 +72,18 @@ Iterable<DataCase> dataCases({
     var relativeDir =
         p.relative(p.dirname(entry.path), from: p.dirname(directory));
 
-    yield* dataCasesInFile(path: entry.path, baseDir: relativeDir);
+    results.addAll(dataCasesInFile(path: entry.path, baseDir: relativeDir));
   }
+
+  // The API makes no guarantees on order. This is just here for stability in
+  // tests.
+  results.sort((a, b) {
+    var compare = a.directory.compareTo(b.directory);
+    if (compare != 0) return compare;
+
+    return a.file.compareTo(b.file);
+  });
+  return results;
 }
 
 /// Parse and yield data cases (each a [DataCase]) from the directory containing
