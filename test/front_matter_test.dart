@@ -7,7 +7,7 @@ import 'package:path/path.dart' as p;
 import 'package:test/test.dart';
 
 void main() {
-  var iterator;
+  Iterator iterator;
   var dataCase;
   var iteratorIsEmpty;
 

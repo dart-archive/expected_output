@@ -5,23 +5,23 @@ import 'package:path/path.dart' as p;
 import 'package:test/test.dart';
 
 /// Parse and yield data cases (each a [DataCase]) from [path].
-Iterable<DataCase> dataCasesInFile({String path, String baseDir: null}) sync* {
-  var file = p.basename(path).replaceFirst(new RegExp(r'\..+$'), '');
+Iterable<DataCase> dataCasesInFile({String path, String baseDir}) sync* {
+  var file = p.basename(path).replaceFirst(RegExp(r'\..+$'), '');
   baseDir ??= p.relative(p.dirname(path), from: p.dirname(p.dirname(path)));
 
   // Explicitly create a File, in case the entry is a Link.
-  var lines = new File(path).readAsLinesSync();
+  var lines = File(path).readAsLinesSync();
 
-  var front_matter = new StringBuffer();
+  var frontMatter = StringBuffer();
 
   var i = 0;
 
   while (!lines[i].startsWith('>>>')) {
-    front_matter.write('${lines[i++]}\n');
+    frontMatter.write('${lines[i++]}\n');
   }
 
   while (i < lines.length) {
-    var description = lines[i++].replaceFirst(new RegExp(r'>>>\s*'), '').trim();
+    var description = lines[i++].replaceFirst(RegExp(r'>>>\s*'), '').trim();
     var skip = description.startsWith('skip:');
     if (description == '') {
       description = 'line ${i + 1}';
@@ -39,10 +39,10 @@ Iterable<DataCase> dataCasesInFile({String path, String baseDir: null}) sync* {
       expectedOutput += lines[i] + '\n';
     }
 
-    var dataCase = new DataCase(
+    var dataCase = DataCase(
         directory: baseDir,
         file: file,
-        front_matter: front_matter.toString(),
+        front_matter: frontMatter.toString(),
         description: description,
         skip: skip,
         input: input,
@@ -58,11 +58,11 @@ Iterable<DataCase> dataCasesInFile({String path, String baseDir: null}) sync* {
 /// recursively, according to [recursive].
 Iterable<DataCase> dataCases({
   String directory,
-  String extension: 'unit',
-  bool recursive: true,
+  String extension = 'unit',
+  bool recursive = true,
 }) {
-  var entries = new Directory(directory)
-      .listSync(recursive: recursive, followLinks: false);
+  var entries =
+      Directory(directory).listSync(recursive: recursive, followLinks: false);
   var results = <DataCase>[];
   for (var entry in entries) {
     if (!entry.path.endsWith(extension)) {
@@ -110,9 +110,9 @@ Iterable<DataCase> dataCases({
 /// ```
 Iterable<DataCase> dataCasesUnder({
   Symbol library,
-  String subdirectory: '',
-  String extension: 'unit',
-  bool recursive: true,
+  String subdirectory = '',
+  String extension = 'unit',
+  bool recursive = true,
 }) sync* {
   var directory = p.join(
       p.dirname(currentMirrorSystem().findLibrary(library).uri.toFilePath()),
@@ -132,8 +132,8 @@ Iterable<DataCase> dataCasesUnder({
 /// A test will be skipped if it's description starts with "skip:".
 void testDataCases(
     {String directory,
-    String extension: 'unit',
-    bool recursive: true,
+    String extension = 'unit',
+    bool recursive = true,
     void testBody(DataCase dataCase)}) {
   for (var dataCase in dataCases(
       directory: directory, extension: extension, recursive: recursive)) {
@@ -171,9 +171,9 @@ void testDataCases(
 /// ```
 void testDataCasesUnder(
     {Symbol library,
-    String subdirectory: '',
-    String extension: 'unit',
-    bool recursive: true,
+    String subdirectory = '',
+    String extension = 'unit',
+    bool recursive = true,
     void testBody(DataCase dataCase)}) {
   for (var dataCase in dataCasesUnder(
       library: library,
@@ -189,20 +189,24 @@ void testDataCasesUnder(
 class DataCase {
   final String directory;
   final String file;
+
+  // ignore: non_constant_identifier_names
   final String front_matter;
   final String description;
   final bool skip;
   final String input;
   final String expectedOutput;
 
-  DataCase(
-      {this.directory,
-      this.file,
-      this.front_matter,
-      this.description,
-      this.skip,
-      this.input,
-      this.expectedOutput});
+  DataCase({
+    this.directory,
+    this.file,
+    // ignore: non_constant_identifier_names
+    this.front_matter,
+    this.description,
+    this.skip,
+    this.input,
+    this.expectedOutput,
+  });
 
   /// A good standard description for `test()`, derived from the data directory,
   /// the particular data file, and the test case description.
