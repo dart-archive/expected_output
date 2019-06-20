@@ -1,0 +1,18 @@
+>>> Works on simple strings
+This is a single line.
+<<<
+THIS IS A SINGLE LINE.
+>>> Does nothing to upper case strings
+THIS IS ALREADY UPPER CASE.
+<<<
+THIS IS ALREADY UPPER CASE.
+>>> Works on multiline strings
+This is the first line.
+This is another line.
+
+This is another paragraph.
+<<<
+THIS IS THE FIRST LINE.
+THIS IS ANOTHER LINE.
+
+THIS IS ANOTHER PARAGRAPH.
