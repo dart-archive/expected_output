@@ -1,3 +1,7 @@
+## 1.2.2
+
+* Internal code health improvements.
+
 ## 1.2.1
 
 * Set max SDK version to <3.0.0, and adjusted other dependencies.
