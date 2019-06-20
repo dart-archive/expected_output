@@ -1,5 +1,6 @@
 ## 1.2.2
 
+* Improved package description and added an example.
 * Internal code health improvements.
 
 ## 1.2.1
