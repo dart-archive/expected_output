@@ -1,6 +1,6 @@
 name: expected_output
 version: 1.2.2-dev
-description: >
+description: >-
   Easily write and test multiline input and expected output, and avoid test case
   data clutter in your test logic.
 author: Dart Team <misc@dartlang.org>
