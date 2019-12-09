@@ -138,7 +138,7 @@ void testDataCases(
     {String directory,
     String extension = 'unit',
     bool recursive = true,
-    void testBody(DataCase dataCase)}) {
+    void Function(DataCase dataCase) testBody}) {
   for (var dataCase in dataCases(
       directory: directory, extension: extension, recursive: recursive)) {
     test(dataCase.description, () => testBody(dataCase), skip: dataCase.skip);
@@ -178,7 +178,7 @@ void testDataCasesUnder(
     String subdirectory = '',
     String extension = 'unit',
     bool recursive = true,
-    void testBody(DataCase dataCase)}) {
+    void Function(DataCase dataCase) testBody}) {
   for (var dataCase in dataCasesUnder(
       library: library,
       subdirectory: subdirectory,
