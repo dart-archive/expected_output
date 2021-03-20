@@ -9,7 +9,8 @@ import 'package:path/path.dart' as p;
 import 'package:test/test.dart';
 
 /// Parse and yield data cases (each a [DataCase]) from [path].
-Iterable<DataCase> dataCasesInFile({String path, String baseDir}) sync* {
+Iterable<DataCase> dataCasesInFile(
+    {required String path, String? baseDir}) sync* {
   var file = p.basename(path).replaceFirst(RegExp(r'\..+$'), '');
   baseDir ??= p.relative(p.dirname(path), from: p.dirname(p.dirname(path)));
 
@@ -61,7 +62,7 @@ Iterable<DataCase> dataCasesInFile({String path, String baseDir}) sync* {
 /// cases are read from files located immediately in [directory], or
 /// recursively, according to [recursive].
 Iterable<DataCase> dataCases({
-  String directory,
+  required String directory,
   String extension = 'unit',
   bool recursive = true,
 }) {
@@ -113,7 +114,7 @@ Iterable<DataCase> dataCases({
 /// }
 /// ```
 Iterable<DataCase> dataCasesUnder({
-  Symbol library,
+  required Symbol library,
   String subdirectory = '',
   String extension = 'unit',
   bool recursive = true,
@@ -135,10 +136,10 @@ Iterable<DataCase> dataCasesUnder({
 ///
 /// A test will be skipped if it's description starts with "skip:".
 void testDataCases(
-    {String directory,
+    {required String directory,
     String extension = 'unit',
     bool recursive = true,
-    void Function(DataCase dataCase) testBody}) {
+    required void Function(DataCase dataCase) testBody}) {
   for (var dataCase in dataCases(
       directory: directory, extension: extension, recursive: recursive)) {
     test(dataCase.description, () => testBody(dataCase), skip: dataCase.skip);
@@ -174,11 +175,11 @@ void testDataCases(
 /// }
 /// ```
 void testDataCasesUnder(
-    {Symbol library,
+    {required Symbol library,
     String subdirectory = '',
     String extension = 'unit',
     bool recursive = true,
-    void Function(DataCase dataCase) testBody}) {
+    required void Function(DataCase dataCase) testBody}) {
   for (var dataCase in dataCasesUnder(
       library: library,
       subdirectory: subdirectory,
@@ -202,14 +203,14 @@ class DataCase {
   final String expectedOutput;
 
   DataCase({
-    this.directory,
-    this.file,
+    required this.directory,
+    required this.file,
     // ignore: non_constant_identifier_names
-    this.front_matter,
-    this.description,
-    this.skip,
-    this.input,
-    this.expectedOutput,
+    required this.front_matter,
+    required this.description,
+    required this.skip,
+    required this.input,
+    required this.expectedOutput,
   });
 
   /// A good standard description for `test()`, derived from the data directory,
