@@ -1,3 +1,8 @@
+## 2.0.0
+
+* Migrate to null-safety
+* Set min SDK version to >=2.12.0
+
 ## 1.2.2
 
 * Improved package description and added an example.

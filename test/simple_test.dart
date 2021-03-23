@@ -11,9 +11,9 @@ import 'package:path/path.dart' as p;
 import 'package:test/test.dart';
 
 void main() {
-  Iterator iterator;
-  var dataCase;
-  var iteratorIsEmpty;
+  late Iterator<DataCase> iterator;
+  late DataCase dataCase;
+  late bool iteratorIsEmpty;
 
   setUpAll(() {
     // Locate the "test" directory. Use mirrors so that this works with the test
@@ -27,7 +27,9 @@ void main() {
 
   setUp(() {
     iteratorIsEmpty = !iterator.moveNext();
-    dataCase = iterator.current;
+    if (!iteratorIsEmpty) {
+      dataCase = iterator.current;
+    }
   });
 
   test('parses case w/o a description', () {
